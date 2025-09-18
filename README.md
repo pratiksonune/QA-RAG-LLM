@@ -1,15 +1,14 @@
 ### Installation and Setup
 ```bash
 # 1. Clone/create the project directory
-mkdir rag-qa-system
-cd rag-qa-system
+git clone https://github.com/pratiksonune/QA-RAG-LLM.git
 
 # 2. Create virtual environment
-python -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
+uv venv ThoR --python 3.10
+source venv/bin/activate
 
 # 3. Install dependencies
-pip install -r requirements.txt
+uv pip install -r requirements.txt
 
 # 4. Set up environment variables
 cp .env.example .env
@@ -67,18 +66,6 @@ pytest tests/test_embeddings.py -v
 pytest --cov=. --cov-report=html
 ```
 
-### Docker Deployment
-```bash
-# Build and run with docker-compose
-docker-compose up --build
-
-# Run in background
-docker-compose up -d
-
-# View logs
-docker-compose logs -f rag-api
-```
-
 ## Key Features Implemented
 
 1. **Document Ingestion**: Processes markdown files with metadata extraction
@@ -91,10 +78,10 @@ docker-compose logs -f rag-api
 8. **Background Processing**: Async document processing
 9. **Monitoring**: Prometheus metrics and health checks
 10. **Testing**: Comprehensive test suite
-11. **Docker Support**: Containerized deployment
 
 This implementation provides a production-ready RAG Q/A system with all the components you specified!
 
+```python
 async def generate_answer(query: str, contexts: List[dict]) -> str:
     """Generate answer using Gemini API"""
     try:
@@ -228,3 +215,4 @@ async def clear_vector_store():
     except Exception as e:
         logger.error(f"Error clearing vector store: {e}")
         raise HTTPException(status_code=500, detail=str(e))
+```
