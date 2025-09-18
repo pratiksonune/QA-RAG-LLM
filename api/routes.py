@@ -34,8 +34,27 @@ def initialize_vector_store():
     if vector_store is None:
         embedding_dim = model_manager.embedding_service.get_embedding_dim()
         vector_store = FAISSVectorStore(embedding_dim)
-        vector_store.load()  # Try to load existing data
+        vector_store.load()
         retriever = TwoStageRetriever(vector_store)
+
+@router.post("/ingest", response_model=IngestResponse)
+async def ingest_documents(request: IngestRequest, background_tasks: BackgroundTasks):
+    """Ingest new documents into the system"""
+    try:
+        initialize_vector_store()
+
+        # Process documents in background
+        background_tasks.add_task(process_documents_task, request.file_paths, model_manager, vector_store)
+
+        return IngestResponse(
+            message="Ingestion started",
+            total_files=len(request.file_paths),
+            overwrite=request.overwrite
+        )
+
+    except Exception as e:
+        logger.error(f"Error in ingest_documents: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
 
 @router.post("/query", response_model=QueryResponse)
 async def query_documents(request: QueryRequest):
