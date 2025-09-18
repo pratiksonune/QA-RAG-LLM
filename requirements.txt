@@ -1,0 +1,15 @@
+fastapi
+uvicorn
+sentence-transformers
+faiss-cpu
+google-generativeai
+pydantic
+python-multipart
+numpy
+scikit-learn
+python-dotenv
+pytest
+pytest-asyncio
+prometheus-client
+loguru
+pydantic_settings
